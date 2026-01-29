@@ -349,23 +349,6 @@ export OUTPUT_DIR="./output"
 export CONFIG_PATH="/path/to/config.yaml"
 ```
 
-## Dependencies
-
-```toml
-[project]
-dependencies = [
-    "pymilvus>=2.4.0",
-    "pdfplumber",
-    "langchain-text-splitters",
-    "pydantic>=2.0",
-    "python-dotenv",
-    "rich",
-    "pyyaml",
-    "transformers",
-    "spelling",  # Internal library for Gemini embeddings
-]
-```
-
 ## Troubleshooting
 
 ### Milvus Connection Error
