@@ -14,31 +14,31 @@ This system automates document compliance auditing by combining:
 ### Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                           AUDIT PIPELINE                                │
-├─────────────────────────────────────────────────────────────────────────┤
-│                                                                         │
-│  ┌──────────────┐    ┌──────────────┐    ┌──────────────────────────┐  │
-│  │   PDF File   │───▶│   Indexer    │───▶│   Milvus Vector DB       │  │
-│  └──────────────┘    │  - Extract   │    │  - Sparse vectors (BGE)  │  │
-│                      │  - Chunk     │    │  - Dense vectors (Gemini)│  │
-│                      │  - Embed     │    └──────────────────────────┘  │
-│                      └──────────────┘               │                   │
-│                                                     │                   │
-│  ┌──────────────┐    ┌──────────────┐              │                   │
-│  │   Criteria   │───▶│  Deep Agent  │◀─────────────┘                   │
-│  │  (config)    │    │  - Search    │                                  │
-│  └──────────────┘    │  - Evaluate  │    ┌──────────────────────────┐  │
-│                      │  - Retry     │───▶│   Audit Report           │  │
-│                      └──────────────┘    │  - JSON + TXT output     │  │
-│                             ▲            └──────────────────────────┘  │
-│                             │                                          │
-│                      ┌──────────────┐                                  │
-│                      │  Possible    │  (Optional)                      │
-│                      │  Answers     │  LLM pre-analyzes PDF            │
-│                      └──────────────┘                                  │
-│                                                                         │
-└─────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────┐
+│                           AUDIT PIPELINE                                 │
+├──────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  ┌──────────────┐    ┌──────────────┐    ┌────────────────────────────┐  │
+│  │   PDF File   │───▶│   Indexer    │───▶│   Milvus Vector DB         │  │
+│  └──────────────┘    │  - Extract   │    │  - Sparse vectors (BGE)    │  │
+│                      │  - Chunk     │    │  - Dense vectors (Spelling)│  │
+│                      │  - Embed     │    └────────────────────────────┘  │
+│                      └──────────────┘               │                    │
+│                                                     │                    │
+│  ┌──────────────┐    ┌──────────────┐              │                     │
+│  │   Criteria   │───▶│  Deep Agent  │◀─────────────┘                     │
+│  │  (config)    │    │  - Search    │                                    │
+│  └──────────────┘    │  - Evaluate  │    ┌──────────────────────────┐    │
+│                      │  - Retry     │───▶│   Audit Report           │    │
+│                      └──────────────┘    │  - JSON + TXT output     │    │
+│                             ▲            └──────────────────────────┘    │
+│                             │                                            │
+│                      ┌──────────────┐                                    │
+│                      │  Possible    │  (Optional)                        │
+│                      │  Answers     │  LLM pre-analyzes PDF              │
+│                      └──────────────┘                                    │
+│                                                                          │
+└──────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### Pipeline Flow
@@ -287,7 +287,7 @@ The system uses two types of embeddings for retrieval:
 | Type | Model | Purpose |
 |------|-------|---------|
 | Sparse | BGE-M3 | Lexical matching (exact terms) |
-| Dense | Gemini | Semantic understanding (meaning) |
+| Dense | Spelling (gemini-embedding-001) | Semantic understanding (meaning) |
 
 Results are combined using RRF (Reciprocal Rank Fusion) for best accuracy.
 
@@ -347,23 +347,6 @@ export MILVUS_URI="http://127.0.0.1:19530"
 export COLLECTION_NAME="audit_docs_v4"
 export OUTPUT_DIR="./output"
 export CONFIG_PATH="/path/to/config.yaml"
-```
-
-## Dependencies
-
-```toml
-[project]
-dependencies = [
-    "pymilvus>=2.4.0",
-    "pdfplumber",
-    "langchain-text-splitters",
-    "pydantic>=2.0",
-    "python-dotenv",
-    "rich",
-    "pyyaml",
-    "transformers",
-    "spelling",  # Internal library for Gemini embeddings
-]
 ```
 
 ## Troubleshooting
