@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # main.py - Entry Point for the Audit Application
-# =============================================================================
+# ============================================================================
 # This script can be run standalone or via the pipeline.
 #
 # Usage:

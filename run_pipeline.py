@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # run_pipeline.py - Main Pipeline Orchestrator
-# =============================================================================
+# ============================================================================
 # This script orchestrates the entire audit pipeline:
 # 1. Loads configuration from YAML
 # 2. Checks if documents are already indexed
@@ -13,7 +13,7 @@
 #   uv run run_pipeline.py --config my.yaml   # Uses specific config
 #   uv run run_pipeline.py --index-only       # Index only, do not audit
 #   uv run run_pipeline.py --audit-only       # Audit only, do not index
-# =============================================================================
+# ============================================================================
 
 import argparse
 import asyncio

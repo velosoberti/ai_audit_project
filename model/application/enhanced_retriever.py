@@ -1,5 +1,5 @@
 # enhanced_retriever.py - Enhanced Retriever with Possible Answer Support
-# =============================================================================
+# ============================================================================
 """
 Enhanced retriever that uses both criterion AND possible answer as search queries
 to improve retrieval quality. Falls back to criterion-only search when no

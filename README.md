@@ -1,11 +1,11 @@
 # Audit Pipeline
 
-Unified PDF document auditing system using Hybrid RAG (Retrieval-Augmented Generation) with Milvus vector database.
+Unified PDF document auditing system using Hybrid RAG (Retrieval-Augmented Generation) with Milvus vector database
 
 ## Overview
 
 This system automates document compliance auditing by combining:
-- **Hybrid Search**: BGE-M3 (sparse/lexical) + Gemini (dense/semantic) embeddings
+- **Hybrid Search**: BM25 (sparse/lexical) + Gemini (dense/semantic) embeddings
 - **Deep Research Agent**: Iterative search with alternative query generation
 - **Possible Answers**: LLM pre-analysis of raw PDF for enhanced retrieval (optional)
 
@@ -20,7 +20,7 @@ This system automates document compliance auditing by combining:
 │                                                                          │
 │  ┌──────────────┐    ┌──────────────┐    ┌────────────────────────────┐  │
 │  │   PDF File   │───▶│   Indexer    │───▶│   Milvus Vector DB         │  │
-│  └──────────────┘    │  - Extract   │    │  - Sparse vectors (BGE)    │  │
+│  └──────────────┘    │  - Extract   │    │  - Sparse vectors (BM25)   │  │
 │                      │  - Chunk     │    │  - Dense vectors (Spelling)│  │
 │                      │  - Embed     │    └────────────────────────────┘  │
 │                      └──────────────┘               │                    │
@@ -287,7 +287,7 @@ The system uses two types of embeddings for retrieval:
 
 | Type | Model | Purpose |
 |------|-------|---------|
-| Sparse | BGE-M3 | Lexical matching (exact terms) |
+| Sparse | BM25 | Lexical matching (exact terms) |
 | Dense | Spelling (gemini-embedding-001) | Semantic understanding (meaning) |
 
 Results are combined using RRF (Reciprocal Rank Fusion) for best accuracy.

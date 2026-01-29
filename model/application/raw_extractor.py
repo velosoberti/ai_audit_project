@@ -1,5 +1,5 @@
 # raw_extractor.py - Raw PDF Text Extraction for Possible Answer Generation
-# =============================================================================
+# ============================================================================
 
 import os
 from rich.console import Console

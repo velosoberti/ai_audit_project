@@ -1,5 +1,5 @@
 # deep_agent.py - Deep Research Agent for Auditing
-# =============================================================================
+# ============================================================================
 
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING

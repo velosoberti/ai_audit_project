@@ -1,5 +1,5 @@
 # chunker.py - Text Chunking Functions
-# =============================================================================
+# ============================================================================
 
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from .config import CHUNK_SIZE, CHUNK_OVERLAP
