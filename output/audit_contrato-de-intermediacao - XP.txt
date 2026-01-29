@@ -1,0 +1,62 @@
+======================================================================
+AUDIT REPORT
+======================================================================
+Document: contrato-de-intermediacao - XP.pdf
+Total Criteria: 8
+Present: 6
+Absent: 2
+Compliance Rate: 75.0%
+
+----------------------------------------------------------------------
+DETAILED RESULTS
+----------------------------------------------------------------------
+
+1. Is there a registered CNPJ for the Brokerage?
+   Status: PRESENT
+   Confidence: 100%
+   Pages: 1
+   Evidence: XP INVESTIMENTOS CORRETORA DE CÂMBIO, TÍTULOS E VALORES MOBILIÁRIOS S/A, inscrita no CNPJ/MF sob o n...
+
+2. Is there a confidentiality or secrecy clause?
+   Status: PRESENT
+   Confidence: 100%
+   Pages: 13
+   Evidence: (x) por manter sigilo quanto às características e quantidades dos títulos, valores mobiliários e ati...
+
+3. Does the document mention values, fees, or compensation?
+   Status: PRESENT
+   Confidence: 100%
+   Pages: 5, 27
+   Evidence: 19.2. O Assessor de Investimento é remunerado por um percentual do volume total das operações do CLI...
+
+4. Is there a definition of classical music process?
+   Status: ABSENT
+   Confidence: 100%
+   Pages: N/A
+   Evidence: The provided document is a financial brokerage contract (contrato de intermediação) focusing on secu...
+
+5. Is there mention of the Settlement process?
+   Status: PRESENT
+   Confidence: 100%
+   Pages: 9, 12
+   Evidence: (i) validar as informações de operações recebidas do CLIENTE contra as informações recebidas da inst...
+
+6. Does the contract mention obligations of the parties?
+   Status: PRESENT
+   Confidence: 100%
+   Pages: 12
+   Evidence: 7.7.1. O CLIENTE se declara responsável: (i) pela legitimidade, autenticidade, e, quando for o caso,...
+
+7. Is there mention of penalties or fines?
+   Status: PRESENT
+   Confidence: 100%
+   Pages: 6, 25
+   Evidence: se por prontamente indenizar e manter indene a CORRETORA por qualquer penalidade, multa ou perda de ...
+
+8. Does the document have any mention about A5X?
+   Status: ABSENT
+   Confidence: 100%
+   Pages: N/A
+   Evidence: The provided excerpts from the document 'contrato-de-intermediacao - XP.pdf' contain references to C...
+
+======================================================================

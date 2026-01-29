@@ -1,0 +1,118 @@
+# =============================================================================
+# AUDIT PIPELINE CONFIGURATION
+# =============================================================================
+# This file configures the entire audit pipeline:
+# - Milvus connection
+# - Documents to be indexed
+# - Audit criteria
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# MILVUS CONFIGURATION
+# -----------------------------------------------------------------------------
+milvus:
+  uri: "http://127.0.0.1:19530"
+  collection_name: "audit_docs_v4"
+
+# -----------------------------------------------------------------------------
+# CHUNKING CONFIGURATION
+# -----------------------------------------------------------------------------
+chunking:
+  chunk_size: 1000
+  chunk_overlap: 100
+
+# -----------------------------------------------------------------------------
+# EMBEDDING CONFIGURATION
+# -----------------------------------------------------------------------------
+embedding:
+  dense_dim: 3072
+  sparse_model: "BAAI/bge-m3"
+  dense_model: "gemini-embedding-001"
+
+# -----------------------------------------------------------------------------
+# LLM CONFIGURATION
+# -----------------------------------------------------------------------------
+llm:
+  model: "gemini-2.0-flash"
+  temperature: 0
+
+# -----------------------------------------------------------------------------
+# OUTPUT CONFIGURATION
+# -----------------------------------------------------------------------------
+output:
+  directory: "/home/luisveloso/autoreg/output"
+  save_json: true
+  save_txt: true
+
+# -----------------------------------------------------------------------------
+# DOCUMENTS TO PROCESS
+# -----------------------------------------------------------------------------
+# Each document can have:
+#   - path: path to the PDF (required)
+#   - doc_type: document type (required)
+#   - skip_if_indexed: skip if already indexed (default: true)
+#   - reset_collection: clear the collection first (default: false)
+# -----------------------------------------------------------------------------
+documents:
+  - path: "/home/luisveloso/autoreg/pdfs/contrato-de-intermediacao - XP.pdf"
+    doc_type: "contract"
+    skip_if_indexed: true
+    reset_collection: false
+
+  # Add more documents as needed:
+  # - path: "/home/luisveloso/autoreg/pdfs/another-document.pdf"
+  #   doc_type: "addendum"
+  #   skip_if_indexed: true
+
+# -----------------------------------------------------------------------------
+# AUDIT CRITERIA
+# -----------------------------------------------------------------------------
+# Each criterion can be:
+#   - A simple string (uses default confidence of 0.7)
+#   - An object with a specific query and confidence level
+# -----------------------------------------------------------------------------
+audit_criteria:
+  - query: "Is there a registered CNPJ for the Brokerage?"
+    confidence: 0.8
+
+  - query: "Is there a confidentiality or secrecy clause?"
+    confidence: 0.7
+
+  - query: "Does the document mention values, fees, or compensation?"
+    confidence: 0.7
+
+  - query: "Is there a definition of classical music process?"
+    confidence: 0.6
+
+  - query: "Is there mention of the Settlement process?"
+    confidence: 0.7
+
+  - query: "Does the contract mention obligations of the parties?"
+    confidence: 0.7
+
+  - query: "Is there mention of penalties or fines?"
+    confidence: 0.7
+
+  - query: "Does the document have any mention about A5X?"
+    confidence: 0.8
+
+# -----------------------------------------------------------------------------
+# DEEP AGENT CONFIGURATION
+# -----------------------------------------------------------------------------
+deep_agent:
+  enabled: true
+  max_attempts: 3
+  min_confidence: 0.7
+
+# -----------------------------------------------------------------------------
+# PIPELINE OPTIONS
+# -----------------------------------------------------------------------------
+pipeline:
+  # If true always re-index even if the document exists
+  force_reindex: false
+  
+  # If true display performance metrics
+  display_metrics: true
+  
+  # If true skip indexing and go straight to audit
+  skip_indexing: false

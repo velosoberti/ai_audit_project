@@ -1,0 +1,80 @@
+{
+  "document": "contrato-de-intermediacao - XP.pdf",
+  "total_criteria": 8,
+  "criteria_present": 6,
+  "criteria_absent": 2,
+  "compliance_rate": 75.0,
+  "results": [
+    {
+      "criterion": "Is there a registered CNPJ for the Brokerage?",
+      "status": "PRESENT",
+      "evidence": "XP INVESTIMENTOS CORRETORA DE CÂMBIO, TÍTULOS E VALORES MOBILIÁRIOS S/A, inscrita no CNPJ/MF sob o nº 02.332.886/0001-04",
+      "confidence": 1.0,
+      "pages": [
+        1
+      ]
+    },
+    {
+      "criterion": "Is there a confidentiality or secrecy clause?",
+      "status": "PRESENT",
+      "evidence": "(x) por manter sigilo quanto às características e quantidades dos títulos, valores mobiliários e ativos financeiros de titularidade dos CLIENTES;",
+      "confidence": 1.0,
+      "pages": [
+        13
+      ]
+    },
+    {
+      "criterion": "Does the document mention values, fees, or compensation?",
+      "status": "PRESENT",
+      "evidence": "19.2. O Assessor de Investimento é remunerado por um percentual do volume total das operações do CLIENTE (percentual da taxa e corretagem) ou um percentual do valor recebido pela CORRETORA na intermediação do produto ou serviço.",
+      "confidence": 1.0,
+      "pages": [
+        5,
+        27
+      ]
+    },
+    {
+      "criterion": "Is there a definition of classical music process?",
+      "status": "ABSENT",
+      "evidence": "The provided document is a financial brokerage contract (contrato de intermediação) focusing on securities, data protection (LGPD), and investment services. There is no mention or definition of a 'classical music process' within the analyzed text.",
+      "confidence": 1.0,
+      "pages": []
+    },
+    {
+      "criterion": "Is there mention of the Settlement process?",
+      "status": "PRESENT",
+      "evidence": "(i) validar as informações de operações recebidas do CLIENTE contra as informações recebidas da instituição intermediária das operações; (ii) informar às PARTES as divergências que impeçam a liquidação das operações; e ... prazo previsto no CONTRATO para liquidar as operações;",
+      "confidence": 1.0,
+      "pages": [
+        9,
+        12
+      ]
+    },
+    {
+      "criterion": "Does the contract mention obligations of the parties?",
+      "status": "PRESENT",
+      "evidence": "7.7.1. O CLIENTE se declara responsável: (i) pela legitimidade, autenticidade, e, quando for o caso, boa circulação dos objetos deste CONTRATO perante a CORRETORA; (ii) por prover previamente todos os recursos necessários às obrigações financeiras estabelecidas neste CONTRATO, em especial as liquidações das operações envolvendo os títulos, valores mobiliários e ativos financeiros, que devem ser disponibilizados no dia útil anterior ao dia do pagamento; e (iii) por disponibilizar à CORRETORA, no prazo de 5 (cinco) dias úteis, quaisquer declarações, informações, alterações ou determinações por parte que influa, direta ou indiretamente, na prestação do serviço estabelecida neste CONTRATO. 7.7.2. A CORRETORA se declara responsável: (i) pela liberação prévia dos recursos líquidos e disponíveis, dentro do prazo previsto no CONTRATO para liquidar as operações;",
+      "confidence": 1.0,
+      "pages": [
+        12
+      ]
+    },
+    {
+      "criterion": "Is there mention of penalties or fines?",
+      "status": "PRESENT",
+      "evidence": "se por prontamente indenizar e manter indene a CORRETORA por qualquer penalidade, multa ou perda de qualquer natureza, incluindo honorários advocatícios, decorrentes direta ou indiretamente de qualquer inverdade, incorreção, incompletude ou insuficiência nas declarações prestadas à CORRETORA. [...] No caso de eventual saldo devedor, o CLIENTE pagará multa cujo valor ou percentual se encontra definido na tabela de Custos Operacionais, disponibilizada no site da CORRETORA.",
+      "confidence": 1.0,
+      "pages": [
+        6,
+        25
+      ]
+    },
+    {
+      "criterion": "Does the document have any mention about A5X?",
+      "status": "ABSENT",
+      "evidence": "The provided excerpts from the document 'contrato-de-intermediacao - XP.pdf' contain references to Central Bank regulations (BCB 277, IN BCB 81), brokerage rules, and risk management parameters, but there is no mention of the term 'A5X' in the analyzed text.",
+      "confidence": 1.0,
+      "pages": []
+    }
+  ]
+}
