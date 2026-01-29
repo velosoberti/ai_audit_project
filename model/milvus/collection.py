@@ -1,5 +1,5 @@
 # collection.py - Milvus Collection Management
-# =============================================================================
+# ============================================================================
 
 from rich.console import Console
 from pymilvus import connections, utility, Collection

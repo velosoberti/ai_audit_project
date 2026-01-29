@@ -42,8 +42,6 @@ indent-width = 4
 exclude = [".venv"]
 
 
-
-
 [[tool.uv.index]]
 name = "a5x-pypi"
 url = "https://nexus.prod.automation.devops.a5x.com.br/repository/pypi-a5x/simple"

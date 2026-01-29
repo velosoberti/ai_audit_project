@@ -1,5 +1,5 @@
 # indexer.py - Main Indexing Logic with Hybrid Search
-# =============================================================================
+# ==============================================================================
 from pathlib import Path
 
 from rich.console import Console

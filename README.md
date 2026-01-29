@@ -1,6 +1,6 @@
 # Audit Pipeline
 
-Unified PDF document auditing system using Hybrid RAG (Retrieval-Augmented Generation) with Milvus vector database.
+Unified PDF document auditing system using Hybrid RAG (Retrieval-Augmented Generation) with Milvus vector database
 
 ## Overview
 

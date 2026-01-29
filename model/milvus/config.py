@@ -1,6 +1,5 @@
 # config.py - Indexer Configuration with Hybrid Search
 
-
 import os
 import sys
 import warnings

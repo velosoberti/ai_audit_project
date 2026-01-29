@@ -1,5 +1,5 @@
 # retriever.py - Hybrid Semantic Search Functions in Milvus
-# =============================================================================
+# ============================================================================
 
 from pymilvus import Collection, AnnSearchRequest, RRFRanker
 
