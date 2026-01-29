@@ -131,10 +131,11 @@ curl http://127.0.0.1:9091/healthz
 
 ### 3. Configure Environment
 
-Create a `.env` file with your API keys:
+Create a `.env` file with your Spelling keys:
 
 ```bash
-GOOGLE_API_KEY=your_gemini_api_key
+SPELLING_API_KEY="..."
+SPELLING_API_BASE="..."
 ```
 
 ## Configuration
@@ -146,7 +147,7 @@ Edit `config.yaml` to customize the pipeline:
 ```yaml
 milvus:
   uri: "http://127.0.0.1:19530"
-  collection_name: "audit_docs_v4"
+  collection_name: "collection_name" #if want to use another collection change the name
 ```
 
 ### Documents to Process
