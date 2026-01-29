@@ -69,6 +69,11 @@ class DeepAgentConfig:
 
 
 @dataclass
+class PossibleAnswersConfig:
+    enabled: bool = False
+
+
+@dataclass
 class PipelineConfig:
     force_reindex: bool = False
     display_metrics: bool = True
@@ -86,6 +91,7 @@ class Config:
     documents: list[DocumentConfig] = field(default_factory=list)
     audit_criteria: list[CriterionConfig] = field(default_factory=list)
     deep_agent: DeepAgentConfig = field(default_factory=DeepAgentConfig)
+    possible_answers: PossibleAnswersConfig = field(default_factory=PossibleAnswersConfig)
     pipeline: PipelineConfig = field(default_factory=PipelineConfig)
 
 
@@ -196,6 +202,12 @@ def load_config(config_path: Optional[str] = None) -> Config:
         min_confidence=deep_agent_data.get("min_confidence", 0.7)
     )
     
+    # Parse possible answers config
+    possible_answers_data = data.get("possible_answers", {})
+    possible_answers = PossibleAnswersConfig(
+        enabled=possible_answers_data.get("enabled", False)
+    )
+    
     # Parse pipeline config
     pipeline_data = data.get("pipeline", {})
     pipeline = PipelineConfig(
@@ -213,6 +225,7 @@ def load_config(config_path: Optional[str] = None) -> Config:
         documents=documents,
         audit_criteria=audit_criteria,
         deep_agent=deep_agent,
+        possible_answers=possible_answers,
         pipeline=pipeline
     )
 

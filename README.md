@@ -1,153 +1,163 @@
 # Audit Pipeline
 
-Sistema unificado de indexação e auditoria de documentos PDF usando Milvus e busca híbrida.
+Unified PDF document indexing and auditing system using Milvus and hybrid search.
 
-## Estrutura
+## Structure
 
 ```
 audit_pipeline/
-├── config.yaml           # Configuração centralizada
-├── shared_config.py      # Carregador de configuração YAML
-├── run_pipeline.py       # Orquestrador principal
+├── config.yaml           # Centralized configuration
+├── shared_config.py      # YAML configuration loader
+├── run_pipeline.py       # Main orchestrator
 └── model/
-    ├── milvus/           # Módulo de indexação
+    ├── milvus/           # Indexing module
     │   ├── config.py
     │   ├── indexer.py
     │   ├── collection.py
     │   ├── extractor.py
     │   ├── chunker.py
     │   └── models.py
-    └── application/      # Módulo de auditoria
+    └── application/      # Auditing module
         ├── config.py
         ├── auditor.py
         ├── retriever.py
+        ├── enhanced_retriever.py  # Retrieval with possible answers
         ├── evaluator.py
         ├── deep_agent.py
         ├── output.py
         ├── metrics.py
-        └── models.py
+        ├── models.py
+        ├── possible_answer_generator.py  # LLM answer generation
+        ├── possible_answer_models.py     # Pydantic models
+        └── raw_extractor.py              # Raw PDF extraction
 ```
 
-## Configuração
+## Configuration
 
-Edite o arquivo `config.yaml` para configurar:
+Edit the `config.yaml` file to configure:
 
-### Conexão Milvus
+### Milvus Connection
+
 ```yaml
 milvus:
   uri: "http://127.0.0.1:19530"
   collection_name: "audit_docs_v3"
 ```
 
-### Documentos a Processar
+### Documents to Process
+
 ```yaml
 documents:
-  - path: "/caminho/para/documento.pdf"
+  - path: "/path/to/document.pdf"
     doc_type: "contract"
-    skip_if_indexed: true      # Pula se já estiver indexado
-    reset_collection: false    # Limpa collection antes (primeiro doc)
+    skip_if_indexed: true      # Skip if already indexed
+    reset_collection: false    # Clear collection before (first doc)
 ```
 
-### Critérios de Auditoria
+### Audit Criteria
+
 ```yaml
 audit_criteria:
-  - query: "O documento possui CNPJ?"
+  - query: "Does the document have a CNPJ?"
     confidence: 0.8
   
-  - query: "Existe cláusula de confidencialidade?"
+  - query: "Is there a confidentiality clause?"
     confidence: 0.7
 ```
 
-### Opções do Pipeline
+### Possible Answers (Enhanced Retrieval)
+
 ```yaml
-pipeline:
-  force_reindex: false      # Força reindexação mesmo se existir
-  display_metrics: true     # Exibe métricas de performance
-  skip_indexing: false      # Pula direto para auditoria
+possible_answers:
+  enabled: false            # Enable LLM-based possible answer generation
 ```
 
-## Uso
+When enabled, the system generates "possible answers" for each criterion by having an LLM read the raw PDF. These are used to:
+- Enhance hybrid search queries (find more relevant chunks)
+- Provide hints in the evaluator prompt (alongside actual document excerpts)
 
-### Pipeline Completo (indexação + auditoria)
+### Pipeline Options
+
+```yaml
+pipeline:
+  force_reindex: false      # Force reindexing even if exists
+  display_metrics: true     # Display performance metrics
+  skip_indexing: false      # Skip directly to auditing
+```
+
+## Usage
+
+### Full Pipeline (indexing + auditing)
+
 ```bash
 uv run run_pipeline.py
 ```
 
-### Com configuração específica
+### With specific configuration
+
 ```bash
-uv run run_pipeline.py --config minha_config.yaml
+uv run run_pipeline.py --config my_config.yaml
 ```
 
-### Somente indexação
+### Indexing only
+
 ```bash
 uv run run_pipeline.py --index-only
 ```
 
-### Somente auditoria (documentos já indexados)
+### Auditing only (already indexed documents)
+
 ```bash
 uv run run_pipeline.py --audit-only
 ```
 
-## Execução Individual
+## Individual Execution
 
-### Indexar documento específico
+### Index specific document
+
 ```bash
 cd model/milvus
-uv run main.py --pdf /caminho/documento.pdf --doc-type contract
+uv run main.py --pdf /path/to/document.pdf --doc-type contract
 ```
 
-### Listar documentos indexados
+### List indexed documents
+
 ```bash
 cd model/milvus
 uv run main.py --list
 ```
 
-### Auditar documento específico
+### Audit specific document
+
 ```bash
 cd model/application
-uv run main.py --document "documento.pdf" --doc-type contract
+uv run main.py --document "document.pdf" --doc-type contract
 ```
 
-## Fluxo do Pipeline
+## Pipeline Flow
 
-1. **Carrega configuração** do `config.yaml`
-2. **Para cada documento:**
-   - Verifica se já está indexado (filename + doc_type)
-   - Se não indexado: extrai texto, cria chunks, gera embeddings, insere no Milvus
-   - Se indexado: pula direto para auditoria
-3. **Executa auditoria:**
-   - Busca híbrida (sparse + dense) para cada critério
-   - Deep Agent faz múltiplas tentativas se necessário
-   - Gera relatório com evidências e páginas
-4. **Salva outputs:**
-   - JSON com todos os dados
-   - TXT com resumo formatado
+1. **Loads configuration** from `config.yaml`
+2. **For each document:**
+   - Checks if already indexed (filename + doc_type)
+   - If not indexed: extracts text, creates chunks, generates embeddings, inserts into Milvus
+   - If indexed: skips directly to auditing
+3. **Runs audit:**
+   - Hybrid search (sparse + dense) for each criterion
+   - Deep Agent makes multiple attempts if necessary
+   - Generates report with evidence and pages
+4. **Saves outputs:**
+   - JSON with all data
+   - TXT with formatted summary
 
-## Variáveis de Ambiente
+## Environment Variables
 
-O sistema também suporta configuração via variáveis de ambiente (fallback se não houver config.yaml):
+The system also supports configuration via environment variables (fallback if no config.yaml):
 
 ```bash
 export MILVUS_URI="http://127.0.0.1:19530"
 export COLLECTION_NAME="audit_docs_v3"
 export OUTPUT_DIR="./output"
-export CONFIG_PATH="/caminho/config.yaml"
+export CONFIG_PATH="/path/to/config.yaml"
 ```
 
-## Dependências
-
-Adicione ao seu `pyproject.toml`:
-
-```toml
-[project]
-dependencies = [
-    "pymilvus",
-    "pdfplumber",
-    "langchain-text-splitters",
-    "pydantic",
-    "python-dotenv",
-    "rich",
-    "pyyaml",
-    "spelling",  # Biblioteca interna para embeddings
-]
 ```

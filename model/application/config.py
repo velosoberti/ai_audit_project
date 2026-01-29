@@ -44,6 +44,9 @@ try:
         for c in _config.audit_criteria
     ]
     
+    # Possible answers configuration
+    POSSIBLE_ANSWERS_ENABLED = _config.possible_answers.enabled
+    
     _config_loaded = True
     
 except (ImportError, FileNotFoundError):
@@ -63,6 +66,9 @@ except (ImportError, FileNotFoundError):
         {"query": "Is there mention of penalties or fines?", "confidence": 0.7},
         {"query": "Does the document have any mention about A5X?", "confidence": 0.8},
     ]
+    
+    # Possible answers disabled by default in fallback
+    POSSIBLE_ANSWERS_ENABLED = False
     
     _config_loaded = False
 
