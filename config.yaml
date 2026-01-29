@@ -97,6 +97,16 @@ audit_criteria:
     confidence: 0.8
 
 # -----------------------------------------------------------------------------
+# POSSIBLE ANSWERS CONFIGURATION
+# -----------------------------------------------------------------------------
+# When enabled, the system generates "possible answers" for each criterion
+# by having an LLM read the raw PDF. These are used to enhance retrieval
+# and provide hints during evaluation.
+# -----------------------------------------------------------------------------
+possible_answers:
+  enabled: true
+
+# -----------------------------------------------------------------------------
 # DEEP AGENT CONFIGURATION
 # -----------------------------------------------------------------------------
 deep_agent:

@@ -20,43 +20,43 @@ DETAILED RESULTS
 2. Is there a confidentiality or secrecy clause?
    Status: PRESENT
    Confidence: 100%
-   Pages: 13
+   Pages: 13, 30
    Evidence: (x) por manter sigilo quanto às características e quantidades dos títulos, valores mobiliários e ati...
 
 3. Does the document mention values, fees, or compensation?
    Status: PRESENT
    Confidence: 100%
-   Pages: 5, 27
-   Evidence: 19.2. O Assessor de Investimento é remunerado por um percentual do volume total das operações do CLI...
+   Pages: 5, 16
+   Evidence: 9.5. O CLIENTE obriga-se, ainda, a arcar com os seguintes encargos oriundos da realização de operaçõ...
 
 4. Is there a definition of classical music process?
    Status: ABSENT
    Confidence: 100%
-   Pages: N/A
-   Evidence: The provided document is a financial brokerage contract (contrato de intermediação) focusing on secu...
+   Pages: 13, 18, 30
+   Evidence: The document is a financial brokerage contract (contrato de intermediação) and does not contain any ...
 
 5. Is there mention of the Settlement process?
    Status: PRESENT
    Confidence: 100%
-   Pages: 9, 12
-   Evidence: (i) validar as informações de operações recebidas do CLIENTE contra as informações recebidas da inst...
+   Pages: 10, 12
+   Evidence: 7.3.1. O processo de liquidação divide-se em: (i) Pré-liquidação, que consiste no conjunto de proced...
 
 6. Does the contract mention obligations of the parties?
    Status: PRESENT
    Confidence: 100%
-   Pages: 12
+   Pages: 1, 12, 25
    Evidence: 7.7.1. O CLIENTE se declara responsável: (i) pela legitimidade, autenticidade, e, quando for o caso,...
 
 7. Is there mention of penalties or fines?
    Status: PRESENT
    Confidence: 100%
-   Pages: 6, 25
+   Pages: 25
    Evidence: se por prontamente indenizar e manter indene a CORRETORA por qualquer penalidade, multa ou perda de ...
 
 8. Does the document have any mention about A5X?
    Status: ABSENT
    Confidence: 100%
    Pages: N/A
-   Evidence: The provided excerpts from the document 'contrato-de-intermediacao - XP.pdf' contain references to C...
+   Evidence: The provided document excerpts (pages 2, 15, and 18) contain regulatory references (BCB, IN BCB 81),...
 
 ======================================================================

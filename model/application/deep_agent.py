@@ -2,11 +2,15 @@
 # =============================================================================
 
 from dataclasses import dataclass, field
+from typing import TYPE_CHECKING
 from rich.console import Console
 
 from .config import llm
 from .retriever import search_relevant_context
 from .models import CriterionResult
+
+if TYPE_CHECKING:
+    from .possible_answer_models import PossibleAnswer
 
 console = Console()
 
@@ -20,7 +24,8 @@ class SearchState:
     found_pages: set[int] = field(default_factory=set)
     attempts: int = 0
     max_attempts: int = 3
-    min_confidence: float = 0.9 
+    min_confidence: float = 0.9
+    possible_answer: "PossibleAnswer | None" = None
 
 
 class DeepResearchAgent:
@@ -32,12 +37,23 @@ class DeepResearchAgent:
     2. Evaluates if sufficient evidence was found
     3. If not, generates alternative queries and searches again
     4. Repeats until found or reaches attempt limit
+    
+    When possible answers are available, uses them to:
+    - Improve initial search queries
+    - Provide hints in evaluation prompts
     """
     
-    def __init__(self, filename: str, doc_type: str | None = None, collection_name: str | None = None):
+    def __init__(
+        self, 
+        filename: str, 
+        doc_type: str | None = None, 
+        collection_name: str | None = None,
+        possible_answers: dict[str, "PossibleAnswer"] | None = None
+    ):
         self.filename = filename
         self.doc_type = doc_type
         self.collection_name = collection_name
+        self.possible_answers = possible_answers or {}
         self.total_chunks = self._get_total_chunks()
     
     def _get_total_chunks(self) -> int:
@@ -72,9 +88,13 @@ class DeepResearchAgent:
         Returns:
             CriterionResult with the best evaluation found
         """
+        # Get possible answer for this criterion if available
+        possible_answer = self.possible_answers.get(criterion)
+        
         state = SearchState(
             original_criterion=criterion,
-            min_confidence=min_confidence
+            min_confidence=min_confidence,
+            possible_answer=possible_answer
         )
         
         limit = self._calculate_dynamic_limit()
@@ -84,7 +104,8 @@ class DeepResearchAgent:
             
             # Define query for this iteration
             if state.attempts == 1:
-                query = criterion
+                # On first attempt, use possible answer to enhance query if available
+                query = self._get_initial_query(criterion, possible_answer)
             else:
                 query = await self._generate_alternative_query(state)
                 
@@ -94,13 +115,20 @@ class DeepResearchAgent:
             
             state.executed_queries.append(query)
             
-            # Search context with dynamic limit
-            context, pages = await search_relevant_context(
-                criterion=query,
-                limit=limit,
-                filename=self.filename,
-                doc_type=self.doc_type
-            )
+            # Search context - use enhanced retriever if possible answer available
+            if possible_answer and possible_answer.found:
+                context, pages = await self._search_with_possible_answer(
+                    query=query,
+                    possible_answer=possible_answer,
+                    limit=limit
+                )
+            else:
+                context, pages = await search_relevant_context(
+                    criterion=query,
+                    limit=limit,
+                    filename=self.filename,
+                    doc_type=self.doc_type
+                )
             
             # Store results
             state.found_contexts.append({
@@ -123,8 +151,52 @@ class DeepResearchAgent:
         # Return best result found
         return await self._evaluate_with_accumulated_context(state)
     
+    def _get_initial_query(self, criterion: str, possible_answer: "PossibleAnswer | None") -> str:
+        """
+        Get the initial search query, optionally enhanced with possible answer.
+        
+        If a possible answer is available and found relevant info, combines
+        the criterion with key terms from the possible answer for better retrieval.
+        """
+        if not possible_answer or not possible_answer.found or not possible_answer.answer:
+            return criterion
+        
+        # Use criterion as primary query - the enhanced retriever will handle
+        # using the possible answer as an additional query
+        return criterion
+    
+    async def _search_with_possible_answer(
+        self,
+        query: str,
+        possible_answer: "PossibleAnswer",
+        limit: int
+    ) -> tuple[str, list[int]]:
+        """
+        Search using the enhanced retriever with possible answer support.
+        """
+        from .enhanced_retriever import search_with_possible_answer
+        
+        return await search_with_possible_answer(
+            criterion=query,
+            possible_answer=possible_answer,
+            filename=self.filename,
+            doc_type=self.doc_type,
+            limit=limit
+        )
+    
     async def _generate_alternative_query(self, state: SearchState) -> str:
-        """Generates an alternative query based on history."""
+        """Generates an alternative query based on history and possible answer hints."""
+        
+        # Include possible answer hint if available
+        possible_answer_hint = ""
+        if state.possible_answer and state.possible_answer.found and state.possible_answer.answer:
+            possible_answer_hint = f"""
+Hint from initial document analysis:
+{state.possible_answer.answer}
+Suggested pages: {state.possible_answer.relevant_pages}
+
+Use this hint to generate better search queries that might find the relevant information.
+"""
         
         prompt = f"""You are searching for information in a document to verify this criterion:
 "{state.original_criterion}"
@@ -134,7 +206,7 @@ Queries already tried (do not repeat):
 
 Contexts found so far:
 {chr(10).join(c['context'][:200] + '...' for c in state.found_contexts)}
-
+{possible_answer_hint}
 Generate ONE alternative search query to find this information.
 Use synonyms, related terms, or different approaches.
 
@@ -155,7 +227,18 @@ Respond ONLY with the query, without explanations."""
         if not full_context:
             full_context = "No relevant context found after multiple searches."
         
-         
+        # Include possible answer hint if available
+        possible_answer_section = ""
+        if state.possible_answer and state.possible_answer.found and state.possible_answer.answer:
+            possible_answer_section = f"""
+LLM POSSIBLE ANSWER (hint from initial analysis - verify against document):
+{state.possible_answer.answer}
+Suggested pages: {state.possible_answer.relevant_pages}
+
+IMPORTANT: The possible answer is just a hint. ALWAYS verify against the actual document excerpts above.
+DO NOT use text from the possible answer as evidence - only use actual document text.
+"""
+        
         prompt = f"""You are a rigorous compliance auditor analyzing a document.
 
     CRITERION TO EVALUATE:
@@ -165,7 +248,7 @@ Respond ONLY with the query, without explanations."""
     {full_context}
 
     PAGES FOUND: {sorted(state.found_pages) if state.found_pages else 'None'}
-
+{possible_answer_section}
     CRITICAL RULES:
     1. Evaluate if the criterion is PRESENT or ABSENT in the document
     2. The "evidence" field MUST contain the EXACT excerpt copied from the document
