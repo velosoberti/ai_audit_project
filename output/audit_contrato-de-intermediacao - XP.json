@@ -17,11 +17,11 @@
     {
       "criterion": "Is there a confidentiality or secrecy clause?",
       "status": "PRESENT",
-      "evidence": "(x) por manter sigilo quanto às características e quantidades dos títulos, valores mobiliários e ativos financeiros de titularidade dos CLIENTES; [...] As Afiliadas e as Pessoas Autorizadas, junto com a CORRETORA, deverão se obrigar a manter absoluto sigilo quanto a tais informações perante terceiros.",
+      "evidence": "(x) por manter sigilo quanto às características e quantidades dos títulos, valores mobiliários e ativos financeiros de titularidade dos CLIENTES; [...] 15.5. O CLIENTE deverá manter em absoluto sigilo a senha e a assinatura eletrônica, responsabilizando-se pela sua cessão a terceiros.",
       "confidence": 1.0,
       "pages": [
         13,
-        30
+        23
       ]
     },
     {
@@ -30,20 +30,15 @@
       "evidence": "9.5. O CLIENTE obriga-se, ainda, a arcar com os seguintes encargos oriundos da realização de operações e da prestação dos serviços objeto do presente CONTRATO, que serão igualmente debitados na sua conta: (i) todos os tributos devidos relativos à prestação dos serviços ora contratados, que incluem, mas não se limitam, ao Imposto de Renda Retido na Fonte (IR-Fonte) devidos pela CORRETORA, e o Imposto sobre Serviços de Qualquer Natureza–ISSQN, a Contribuição para o Programa de Integração Social – PIS e a Contribuição para o Financiamento da Seguridade Social – COFINS, devidos pela CORRETORA.",
       "confidence": 1.0,
       "pages": [
-        5,
         16
       ]
     },
     {
       "criterion": "Is there a definition of classical music process?",
       "status": "ABSENT",
-      "evidence": "The document is a financial brokerage contract (contrato de intermediação) and does not contain any definition or mention of a 'classical music process'. The text focuses on financial assets, data protection (LGPD), and custody services.",
+      "evidence": "The provided document is a financial brokerage and custody agreement (Contrato de Intermediação e Custódia) focusing on securities, financial assets, and market operations. There is no mention or definition of a 'classical music process' within the analyzed text.",
       "confidence": 1.0,
-      "pages": [
-        13,
-        18,
-        30
-      ]
+      "pages": []
     },
     {
       "criterion": "Is there mention of the Settlement process?",
@@ -62,23 +57,23 @@
       "confidence": 1.0,
       "pages": [
         1,
-        12,
-        25
+        7,
+        12
       ]
     },
     {
       "criterion": "Is there mention of penalties or fines?",
       "status": "PRESENT",
-      "evidence": "se por prontamente indenizar e manter indene a CORRETORA por qualquer penalidade, multa ou perda de qualquer natureza, incluindo honorários advocatícios, decorrentes direta ou indiretamente de qualquer inverdade, incorreção, incompletude ou insuficiência nas declarações prestadas à CORRETORA.",
+      "evidence": "No caso de eventual saldo devedor, o CLIENTE pagará multa cujo valor ou percentual se encontra definido na tabela de Custos Operacionais, disponibilizada no site da CORRETORA. O valor da multa poderá ser alterado pela CORRETORA, sendo o novo valor informado ao CLIENTE.",
       "confidence": 1.0,
       "pages": [
-        25
+        6
       ]
     },
     {
       "criterion": "Does the document have any mention about A5X?",
       "status": "ABSENT",
-      "evidence": "The provided document excerpts (pages 2, 15, and 18) contain regulatory references (BCB, IN BCB 81), operational rules, and risk management clauses, but there is no mention of the term 'A5X' in the text provided.",
+      "evidence": "The provided excerpts from the document 'contrato-de-intermediacao - XP.pdf' (pages 13 and 18) contain clauses regarding custody services, security protocols, and operational responsibilities, but there is no mention of the term 'A5X' or any related alphanumeric identifier.",
       "confidence": 1.0,
       "pages": []
     }

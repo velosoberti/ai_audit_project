@@ -32,8 +32,8 @@ def generate_query_embeddings(text: str) -> dict:
     """
     Generates hybrid embeddings for a search query.
     
-    - Sparse: BGE-M3 (busca lexical)
-    - Dense: Gemini via spelling (busca semântica)
+    - Sparse: BM25 (lexical search)
+    - Dense: Gemini via spelling (semantic search)
     
     Args:
         text: Query text
@@ -41,10 +41,14 @@ def generate_query_embeddings(text: str) -> dict:
     Returns:
         Dict with 'sparse' and 'dense' embeddings
     """
-    # Sparse with BGE-M3
-    sparse_raw = ef_sparse([text])
-    sparse_vector = sparse_to_dict(sparse_raw["sparse"][0])
+    # Sparse with BM25
+    sparse_raw = ef_sparse.encode_queries([text])
+    sparse_vector = sparse_to_dict(sparse_raw[0])
     
+    # If BM25 returns empty vector (no matching terms), use a placeholder
+    # This can happen when query terms aren't in the fitted corpus vocabulary
+    if not sparse_vector:
+        sparse_vector = {0: 0.0001}  # Minimal placeholder to avoid Milvus error
 
     dense_vector = ef_dense.embed_query(text)
     

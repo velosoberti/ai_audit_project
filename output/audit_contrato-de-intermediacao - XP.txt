@@ -20,20 +20,20 @@ DETAILED RESULTS
 2. Is there a confidentiality or secrecy clause?
    Status: PRESENT
    Confidence: 100%
-   Pages: 13, 30
+   Pages: 13, 23
    Evidence: (x) por manter sigilo quanto às características e quantidades dos títulos, valores mobiliários e ati...
 
 3. Does the document mention values, fees, or compensation?
    Status: PRESENT
    Confidence: 100%
-   Pages: 5, 16
+   Pages: 16
    Evidence: 9.5. O CLIENTE obriga-se, ainda, a arcar com os seguintes encargos oriundos da realização de operaçõ...
 
 4. Is there a definition of classical music process?
    Status: ABSENT
    Confidence: 100%
-   Pages: 13, 18, 30
-   Evidence: The document is a financial brokerage contract (contrato de intermediação) and does not contain any ...
+   Pages: N/A
+   Evidence: The provided document is a financial brokerage and custody agreement (Contrato de Intermediação e Cu...
 
 5. Is there mention of the Settlement process?
    Status: PRESENT
@@ -44,19 +44,19 @@ DETAILED RESULTS
 6. Does the contract mention obligations of the parties?
    Status: PRESENT
    Confidence: 100%
-   Pages: 1, 12, 25
+   Pages: 1, 7, 12
    Evidence: 7.7.1. O CLIENTE se declara responsável: (i) pela legitimidade, autenticidade, e, quando for o caso,...
 
 7. Is there mention of penalties or fines?
    Status: PRESENT
    Confidence: 100%
-   Pages: 25
-   Evidence: se por prontamente indenizar e manter indene a CORRETORA por qualquer penalidade, multa ou perda de ...
+   Pages: 6
+   Evidence: No caso de eventual saldo devedor, o CLIENTE pagará multa cujo valor ou percentual se encontra defin...
 
 8. Does the document have any mention about A5X?
    Status: ABSENT
    Confidence: 100%
    Pages: N/A
-   Evidence: The provided document excerpts (pages 2, 15, and 18) contain regulatory references (BCB, IN BCB 81),...
+   Evidence: The provided excerpts from the document 'contrato-de-intermediacao - XP.pdf' (pages 13 and 18) conta...
 
 ======================================================================

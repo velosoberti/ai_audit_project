@@ -12,7 +12,7 @@
 # -----------------------------------------------------------------------------
 milvus:
   uri: "http://127.0.0.1:19530"
-  collection_name: "audit_docs_v4"
+  collection_name: "audit_docs"
 
 # -----------------------------------------------------------------------------
 # CHUNKING CONFIGURATION
@@ -26,8 +26,9 @@ chunking:
 # -----------------------------------------------------------------------------
 embedding:
   dense_dim: 3072
-  sparse_model: "BAAI/bge-m3"
+  sparse_model: "bm25"
   dense_model: "gemini-embedding-001"
+  bm25_model_path: "/home/luisveloso/autoreg/output/bm25_model.json"
 
 # -----------------------------------------------------------------------------
 # LLM CONFIGURATION
