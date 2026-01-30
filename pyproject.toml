@@ -17,12 +17,12 @@ dependencies = [
     "langchain[google-genai]>=1.0.8",
     "rich>=14.3.1",
     "pymilvus>=2.6.7",
+    "pymilvus[model]>=2.6.7",
     "openai>=2.15.0",
     "google-generativeai>=0.8.6",
     "pypdf2>=3.0.1",
     "langchain-text-splitters>=1.1.0",
     "pydantic>=2.12.5",
-    "spelling>=0.1.8",
     "datasets>=4.5.0",
     "torch>=2.10.0",
     "transformers<4.45",
@@ -30,7 +30,7 @@ dependencies = [
     "peft>=0.18.1",
     "flagembedding>=1.3.5",
     "pdfplumber>=0.11.9",
-    "nltk>=3.9.2",
+    "nltk>=3.9.2"
 ]
 
 [tool.ruff]
@@ -41,7 +41,3 @@ show-fixes = true
 indent-width = 4
 exclude = [".venv"]
 
-
-[[tool.uv.index]]
-name = "a5x-pypi"
-url = "https://nexus.prod.automation.devops.a5x.com.br/repository/pypi-a5x/simple"

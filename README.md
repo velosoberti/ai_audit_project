@@ -5,7 +5,7 @@ Unified PDF document auditing system using Hybrid RAG (Retrieval-Augmented Gener
 ## Overview
 
 This system automates document compliance auditing by combining:
-- **Hybrid Search**: BM25 (sparse/lexical) + Gemini (dense/semantic) embeddings
+- **Hybrid Search**: BGE-M3 model for both sparse and dense embeddings
 - **Deep Research Agent**: Iterative search with alternative query generation
 - **Possible Answers**: LLM pre-analysis of raw PDF for enhanced retrieval (optional)
 
@@ -20,8 +20,8 @@ This system automates document compliance auditing by combining:
 │                                                                          │
 │  ┌──────────────┐    ┌──────────────┐    ┌────────────────────────────┐  │
 │  │   PDF File   │───▶│   Indexer    │───▶│   Milvus Vector DB         │  │
-│  └──────────────┘    │  - Extract   │    │  - Sparse vectors (BM25)   │  │
-│                      │  - Chunk     │    │  - Dense vectors (Spelling)│  │
+│  └──────────────┘    │  - Extract   │    │  - Sparse vectors (BGE-M3) │  │
+│                      │  - Chunk     │    │  - Dense vectors (BGE-M3)  │  │
 │                      │  - Embed     │    └────────────────────────────┘  │
 │                      └──────────────┘               │                    │
 │                                                     │                    │
@@ -131,11 +131,11 @@ curl http://127.0.0.1:9091/healthz
 
 ### 3. Configure Environment
 
-Create a `.env` file with your Spelling keys:
+Create a `.env` file with your Google API key:
 
 ```bash
-SPELLING_API_KEY="..."
-SPELLING_API_BASE="..."
+GOOGLE_API_KEY="your-google-api-key"
+MILVUS_URI="http://127.0.0.1:19531"
 ```
 
 ## Configuration
@@ -146,7 +146,7 @@ Edit `config.yaml` to customize the pipeline:
 
 ```yaml
 milvus:
-  uri: "http://127.0.0.1:19530"
+  uri: "http://127.0.0.1:19531"
   collection_name: "collection_name" #if want to use another collection change the name
 ```
 
@@ -283,16 +283,23 @@ DETAILED RESULTS
 
 ### 1. Hybrid Search
 
-The system uses two types of embeddings for retrieval:
+The system uses BGE-M3 model for hybrid embeddings:
 
 | Type | Model | Purpose |
 |------|-------|---------|
-| Sparse | BM25 | Lexical matching (exact terms) |
-| Dense | Spelling (gemini-embedding-001) | Semantic understanding (meaning) |
+| Sparse | BGE-M3 | Learned sparse embeddings (lexical-like matching) |
+| Dense | BGE-M3 | Dense embeddings (semantic understanding) |
 
 Results are combined using RRF (Reciprocal Rank Fusion) for best accuracy.
 
-### 2. Deep Research Agent
+### 2. LLM Evaluation
+
+The system uses Google's Gemini model (gemini-2.5-flash) via LangChain for:
+- Evaluating if criteria are present or absent
+- Generating alternative search queries
+- Pre-analyzing documents for possible answers
+
+### 3. Deep Research Agent
 
 For each criterion, the agent:
 
@@ -304,7 +311,7 @@ For each criterion, the agent:
    - Accumulates context from all searches
 4. Returns best result after max_attempts
 
-### 3. Possible Answers (Optional)
+### 4. Possible Answers (Optional)
 
 When enabled, before the main evaluation:
 
@@ -344,8 +351,9 @@ docker-compose up -d
 Alternative to `config.yaml`:
 
 ```bash
-export MILVUS_URI="http://127.0.0.1:19530"
-export COLLECTION_NAME="audit_docs_v4"
+export GOOGLE_API_KEY="your-google-api-key"
+export MILVUS_URI="http://127.0.0.1:19531"
+export COLLECTION_NAME="audit_docs"
 export OUTPUT_DIR="./output"
 export CONFIG_PATH="/path/to/config.yaml"
 ```
@@ -355,7 +363,7 @@ export CONFIG_PATH="/path/to/config.yaml"
 ### Milvus Connection Error
 
 ```
-MilvusException: Fail connecting to server on 127.0.0.1:19530
+MilvusException: Fail connecting to server on 127.0.0.1:19531
 ```
 
 **Solution:**

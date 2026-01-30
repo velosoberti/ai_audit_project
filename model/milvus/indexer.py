@@ -13,10 +13,7 @@ from pymilvus import (
     DataType,
     Collection,
 )
-from pymilvus.model.sparse import BM25EmbeddingFunction
-
-from spelling import Embedding
-from spelling.embedding.model import GoogleEmbeddingModel
+from pymilvus.model.hybrid import BGEM3EmbeddingFunction
 
 from .config import COLLECTION_NAME, CHUNK_SIZE, CHUNK_OVERLAP, MILVUS_URI, DENSE_DIM, BM25_MODEL_PATH
 from .models import IndexedDocument
@@ -29,8 +26,8 @@ console = Console()
 # HYBRID EMBEDDING MODEL INITIALIZATION
 # =============================================================================
 
-ef_sparse = BM25EmbeddingFunction()
-gemini_embeddings = Embedding(model=GoogleEmbeddingModel.GEMINI_EMBEDDING_001)
+# BGE-M3 provides both sparse and dense embeddings in a single model
+ef_bgem3 = BGEM3EmbeddingFunction(use_fp16=False, device="cpu")
 
 
 def sparse_to_dict(sparse_array) -> dict[int, float]:
@@ -39,32 +36,22 @@ def sparse_to_dict(sparse_array) -> dict[int, float]:
     return {int(i): float(v) for i, v in zip(coo.col, coo.data)}
 
 
-def fit_bm25(corpus: list[str]):
-    """Fits the BM25 model on the given corpus. Must be called before encoding."""
-    ef_sparse.fit(corpus)
-
-
-def save_bm25_model(path: str = None):
-    """Saves the fitted BM25 model to disk."""
-    save_path = path or BM25_MODEL_PATH
-    ef_sparse.save(save_path)
-    console.print(f"    [green]✓ BM25 model saved to {save_path}[/green]")
-
-
 def generate_hybrid_embeddings(texts: list[str]) -> dict:
     """
-    Generates hybrid embeddings:
-    - Sparse: BM25 (lexical search)
-    - Dense: Gemini via spelling (semantic search)
+    Generates hybrid embeddings using BGE-M3:
+    - Sparse: Learned sparse embeddings (lexical-like search)
+    - Dense: Dense embeddings (semantic search)
     
-    Note: BM25 must be fitted on a corpus before calling this function.
+    BGE-M3 generates both sparse and dense embeddings in a single call.
     """
-    # Sparse with BM25
-    sparse_raw = ef_sparse.encode_documents(texts)
-    sparse_vectors = [sparse_to_dict(sp) for sp in sparse_raw]
+    # BGE-M3 returns both sparse and dense embeddings
+    embeddings = ef_bgem3.encode_documents(texts)
     
-    # Dense with Gemini
-    dense_vectors = gemini_embeddings.embed_documents(texts)
+    # Extract sparse vectors and convert to dict format
+    sparse_vectors = [sparse_to_dict(sp) for sp in embeddings["sparse"]]
+    
+    # Extract dense vectors
+    dense_vectors = embeddings["dense"]
     
     # Ensure it's a list of lists
     if hasattr(dense_vectors, 'tolist'):
@@ -156,7 +143,7 @@ def initialize_collection(
 
         schema = CollectionSchema(
             fields,
-            description="Documents for auditing with hybrid search (BM25 sparse + Gemini dense)"
+            description="Documents for auditing with hybrid search (BGE-M3 sparse + dense)"
         )
         col = Collection(col_name, schema)
 
@@ -304,13 +291,8 @@ def index_document(
     total_chunks = len(chunks)
     console.print(f"    [green]✓ {total_chunks} chunks created[/green]")
 
-    # ----- STEP 5: Fit BM25 and generate hybrid embeddings -----
-    console.print("[bold]3/4[/bold] Fitting BM25 and generating hybrid embeddings (BM25 sparse + Gemini dense)...")
-    
-    # Fit BM25 on all chunk texts before encoding
-    all_texts = [c["text"] for c in chunks]
-    fit_bm25(all_texts)
-    save_bm25_model()
+    # ----- STEP 5: Generate hybrid embeddings with BGE-M3 -----
+    console.print("[bold]3/4[/bold] Generating hybrid embeddings with BGE-M3 (sparse + dense)...")
 
     data_to_insert = []
 

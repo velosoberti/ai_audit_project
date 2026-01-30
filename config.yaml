@@ -11,7 +11,7 @@
 # MILVUS CONFIGURATION
 # -----------------------------------------------------------------------------
 milvus:
-  uri: "http://127.0.0.1:19530"
+  uri: "http://127.0.0.1:19531"
   collection_name: "audit_docs"
 
 # -----------------------------------------------------------------------------
@@ -25,16 +25,16 @@ chunking:
 # EMBEDDING CONFIGURATION
 # -----------------------------------------------------------------------------
 embedding:
-  dense_dim: 3072
-  sparse_model: "bm25"
-  dense_model: "gemini-embedding-001"
+  dense_dim: 1024  # BGE-M3 default dimension
+  sparse_model: "bge-m3"
+  dense_model: "bge-m3"
   bm25_model_path: "/home/luisveloso/autoreg/output/bm25_model.json"
 
 # -----------------------------------------------------------------------------
 # LLM CONFIGURATION
 # -----------------------------------------------------------------------------
 llm:
-  model: "gemini-2.0-flash"
+  model: "gemini-2.5-flash"
   temperature: 0
 
 # -----------------------------------------------------------------------------
@@ -105,13 +105,13 @@ audit_criteria:
 # and provide hints during evaluation.
 # -----------------------------------------------------------------------------
 possible_answers:
-  enabled: true
+  enabled: false
 
 # -----------------------------------------------------------------------------
 # DEEP AGENT CONFIGURATION
 # -----------------------------------------------------------------------------
 deep_agent:
-  enabled: true
+  enabled: false
   max_attempts: 3
   min_confidence: 0.7
 

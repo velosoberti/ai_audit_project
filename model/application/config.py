@@ -13,10 +13,8 @@ warnings.filterwarnings("ignore", message=".*XLMRobertaTokenizerFast.*")
 
 from dotenv import load_dotenv
 from pymilvus import connections, Collection
-from pymilvus.model.sparse import BM25EmbeddingFunction
-from spelling import Chat, Embedding
-from spelling.chat.model import GeminiModel
-from spelling.embedding.model import GoogleEmbeddingModel
+from pymilvus.model.hybrid import BGEM3EmbeddingFunction
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 # Add parent directories to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
@@ -54,7 +52,7 @@ except (ImportError, FileNotFoundError):
     # Fallback to defaults/environment
     MILVUS_URI = os.environ.get("MILVUS_URI", "http://127.0.0.1:19530")
     COLLECTION_NAME = os.environ.get("COLLECTION_NAME", "audit_docs_v3")
-    DENSE_DIM = int(os.environ.get("DENSE_DIM", "3072"))
+    DENSE_DIM = int(os.environ.get("DENSE_DIM", "1024"))  # BGE-M3 default
     BM25_MODEL_PATH = os.environ.get("BM25_MODEL_PATH", "./output/bm25_model.json")
     OUTPUT_DIR = Path(os.environ.get("OUTPUT_DIR", "./output"))
     
@@ -87,25 +85,20 @@ connections.connect(uri=MILVUS_URI)
 # EMBEDDING MODELS
 # =============================================================================
 
-# Load BM25 model from saved file (must be fitted during indexing first)
-ef_sparse = BM25EmbeddingFunction()
-_bm25_path = Path(BM25_MODEL_PATH)
-if _bm25_path.exists():
-    ef_sparse.load(_bm25_path)
-else:
-    import warnings
-    warnings.warn(
-        f"BM25 model not found at {BM25_MODEL_PATH}. "
-        "Run indexing first to create the model."
-    )
+# BGE-M3 provides both sparse and dense embeddings
+ef_bgem3 = BGEM3EmbeddingFunction(use_fp16=False, device="cpu")
 
-ef_dense = Embedding(model=GoogleEmbeddingModel.GEMINI_EMBEDDING_001)
+# For query embedding, we use the same BGE-M3 model
+ef_dense = ef_bgem3
+
+# For sparse queries, we also use BGE-M3
+ef_sparse = ef_bgem3
 
 # =============================================================================
 # LANGUAGE MODEL (LLM)
 # =============================================================================
 
-llm = Chat(model=GeminiModel.GEMINI_3_FLASH_PREVIEW, temperature=0)
+llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0)
 
 
 # =============================================================================

@@ -3,7 +3,7 @@
 
 from pymilvus import Collection, AnnSearchRequest, RRFRanker
 
-from .config import ef_sparse, ef_dense, COLLECTION_NAME, llm
+from .config import ef_bgem3, COLLECTION_NAME, llm
 
 
 def sparse_to_dict(sparse_array) -> dict[int, float]:
@@ -30,10 +30,10 @@ Respond only with the queries, one per line, without numbering."""
 
 def generate_query_embeddings(text: str) -> dict:
     """
-    Generates hybrid embeddings for a search query.
+    Generates hybrid embeddings for a search query using BGE-M3.
     
-    - Sparse: BM25 (lexical search)
-    - Dense: Gemini via spelling (semantic search)
+    - Sparse: Learned sparse embeddings (lexical-like search)
+    - Dense: Dense embeddings (semantic search)
     
     Args:
         text: Query text
@@ -41,18 +41,19 @@ def generate_query_embeddings(text: str) -> dict:
     Returns:
         Dict with 'sparse' and 'dense' embeddings
     """
-    # Sparse with BM25
-    sparse_raw = ef_sparse.encode_queries([text])
-    sparse_vector = sparse_to_dict(sparse_raw[0])
+    # BGE-M3 encode_queries returns both sparse and dense
+    embeddings = ef_bgem3.encode_queries([text])
     
-    # If BM25 returns empty vector (no matching terms), use a placeholder
-    # This can happen when query terms aren't in the fitted corpus vocabulary
+    # Extract sparse vector and convert to dict format
+    sparse_vector = sparse_to_dict(embeddings["sparse"][0])
+    
+    # If sparse returns empty vector, use a placeholder
     if not sparse_vector:
-        sparse_vector = {0: 0.0001}  # Minimal placeholder to avoid Milvus error
+        sparse_vector = {0: 0.0001}
 
-    dense_vector = ef_dense.embed_query(text)
+    # Extract dense vector
+    dense_vector = embeddings["dense"][0]
     
-
     if hasattr(dense_vector, 'tolist'):
         dense_vector = dense_vector.tolist()
     

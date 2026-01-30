@@ -8,7 +8,7 @@ possible answer is available.
 
 from pymilvus import Collection, AnnSearchRequest, RRFRanker
 
-from .config import ef_sparse, ef_dense, COLLECTION_NAME
+from .config import ef_bgem3, COLLECTION_NAME
 from .possible_answer_models import PossibleAnswer
 from .retriever import generate_query_embeddings, sparse_to_dict
 

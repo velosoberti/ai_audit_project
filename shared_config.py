@@ -25,9 +25,9 @@ class ChunkingConfig:
 
 @dataclass
 class EmbeddingConfig:
-    dense_dim: int = 3072
-    sparse_model: str = "bm25"
-    dense_model: str = "gemini-embedding-001"
+    dense_dim: int = 1024  # BGE-M3 default
+    sparse_model: str = "bge-m3"
+    dense_model: str = "bge-m3"
     bm25_model_path: str = "./output/bm25_model.json"
 
 
@@ -154,9 +154,9 @@ def load_config(config_path: Optional[str] = None) -> Config:
     # Parse embedding config
     embedding_data = data.get("embedding", {})
     embedding = EmbeddingConfig(
-        dense_dim=embedding_data.get("dense_dim", 3072),
-        sparse_model=embedding_data.get("sparse_model", "bm25"),
-        dense_model=embedding_data.get("dense_model", "gemini-embedding-001"),
+        dense_dim=embedding_data.get("dense_dim", 1024),  # BGE-M3 default
+        sparse_model=embedding_data.get("sparse_model", "bge-m3"),
+        dense_model=embedding_data.get("dense_model", "bge-m3"),
         bm25_model_path=embedding_data.get("bm25_model_path", "./output/bm25_model.json")
     )
     

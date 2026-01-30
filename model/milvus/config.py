@@ -32,5 +32,5 @@ except (ImportError, FileNotFoundError):
     COLLECTION_NAME = os.environ.get("COLLECTION_NAME", "audit_docs_v3")
     CHUNK_SIZE = int(os.environ.get("CHUNK_SIZE", "1000"))
     CHUNK_OVERLAP = int(os.environ.get("CHUNK_OVERLAP", "100"))
-    DENSE_DIM = int(os.environ.get("DENSE_DIM", "3072"))
+    DENSE_DIM = int(os.environ.get("DENSE_DIM", "1024"))  # BGE-M3 default
     BM25_MODEL_PATH = os.environ.get("BM25_MODEL_PATH", "./output/bm25_model.json")
